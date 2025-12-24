@@ -1,0 +1,16 @@
+{
+    "name": "Ronin.Gameplay",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6206a2f2721069a4a970cbe9d0417060"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
