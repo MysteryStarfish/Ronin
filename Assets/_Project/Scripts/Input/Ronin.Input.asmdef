@@ -1,9 +1,8 @@
 {
-    "name": "Ronin.Gameplay",
+    "name": "Ronin.Input",
     "rootNamespace": "",
     "references": [
-        "GUID:6206a2f2721069a4a970cbe9d0417060",
-        "GUID:942935a6322f11e4dacdd76605dca715"
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
