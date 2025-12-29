@@ -111,13 +111,22 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Sneak"",
+                    ""type"": ""Button"",
+                    ""id"": ""9b68d0bc-33f6-4bb1-9a5a-95b28148a6fb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Dash"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""0136530d-a744-4885-a67d-ec363f541b36"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""Attack"",
@@ -168,6 +177,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""LockRight"",
                     ""type"": ""Button"",
                     ""id"": ""8e920473-0d5a-4072-a4ae-9024ad9dd3ae"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LockClosest"",
+                    ""type"": ""Button"",
+                    ""id"": ""3d27a856-c452-4f46-a44d-6acd23603bbb"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -320,8 +338,30 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""01c148e5-b454-41d0-b6e9-5db113e302ee"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""859ccd54-88d7-497b-a765-9833c79b341f"",
                     ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""86fa393e-e111-4e50-a96c-59add1a1d05a"",
+                    ""path"": ""<Keyboard>/u"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -392,6 +432,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SpecialAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a56baed-9871-4a3e-a21d-f01cc5a2bb66"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LockClosest"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ecd783c7-ee50-4809-9871-87c4b23f6337"",
+                    ""path"": ""<Keyboard>/o"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sneak"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -981,6 +1043,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
+        m_Player_Sneak = m_Player.FindAction("Sneak", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_ChargeAttack = m_Player.FindAction("ChargeAttack", throwIfNotFound: true);
@@ -988,6 +1051,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Unlock = m_Player.FindAction("Unlock", throwIfNotFound: true);
         m_Player_LockLeft = m_Player.FindAction("LockLeft", throwIfNotFound: true);
         m_Player_LockRight = m_Player.FindAction("LockRight", throwIfNotFound: true);
+        m_Player_LockClosest = m_Player.FindAction("LockClosest", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1083,6 +1147,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Run;
+    private readonly InputAction m_Player_Sneak;
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_ChargeAttack;
@@ -1090,6 +1155,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Unlock;
     private readonly InputAction m_Player_LockLeft;
     private readonly InputAction m_Player_LockRight;
+    private readonly InputAction m_Player_LockClosest;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1109,6 +1175,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Run".
         /// </summary>
         public InputAction @Run => m_Wrapper.m_Player_Run;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/Sneak".
+        /// </summary>
+        public InputAction @Sneak => m_Wrapper.m_Player_Sneak;
         /// <summary>
         /// Provides access to the underlying input action "Player/Dash".
         /// </summary>
@@ -1137,6 +1207,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/LockRight".
         /// </summary>
         public InputAction @LockRight => m_Wrapper.m_Player_LockRight;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/LockClosest".
+        /// </summary>
+        public InputAction @LockClosest => m_Wrapper.m_Player_LockClosest;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1169,6 +1243,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Run.started += instance.OnRun;
             @Run.performed += instance.OnRun;
             @Run.canceled += instance.OnRun;
+            @Sneak.started += instance.OnSneak;
+            @Sneak.performed += instance.OnSneak;
+            @Sneak.canceled += instance.OnSneak;
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
@@ -1190,6 +1267,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @LockRight.started += instance.OnLockRight;
             @LockRight.performed += instance.OnLockRight;
             @LockRight.canceled += instance.OnLockRight;
+            @LockClosest.started += instance.OnLockClosest;
+            @LockClosest.performed += instance.OnLockClosest;
+            @LockClosest.canceled += instance.OnLockClosest;
         }
 
         /// <summary>
@@ -1207,6 +1287,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Run.started -= instance.OnRun;
             @Run.performed -= instance.OnRun;
             @Run.canceled -= instance.OnRun;
+            @Sneak.started -= instance.OnSneak;
+            @Sneak.performed -= instance.OnSneak;
+            @Sneak.canceled -= instance.OnSneak;
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
@@ -1228,6 +1311,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @LockRight.started -= instance.OnLockRight;
             @LockRight.performed -= instance.OnLockRight;
             @LockRight.canceled -= instance.OnLockRight;
+            @LockClosest.started -= instance.OnLockClosest;
+            @LockClosest.performed -= instance.OnLockClosest;
+            @LockClosest.canceled -= instance.OnLockClosest;
         }
 
         /// <summary>
@@ -1543,6 +1629,13 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRun(InputAction.CallbackContext context);
         /// <summary>
+        /// Method invoked when associated input action "Sneak" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSneak(InputAction.CallbackContext context);
+        /// <summary>
         /// Method invoked when associated input action "Dash" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -1591,6 +1684,13 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnLockRight(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "LockClosest" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLockClosest(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

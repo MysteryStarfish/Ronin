@@ -8,9 +8,10 @@ namespace Ronin.Input
     public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions
     {
         private PlayerInputActions _playerInputActions;
-        public event UnityAction<Vector2> OnMoveEvent = delegate {};
-        public event UnityAction OnRunEvent = delegate {};
-        public event UnityAction OnDashEvent = delegate {};
+        public event UnityAction<Vector2> MoveEvent = delegate {};
+        public event UnityAction RunEvent = delegate {};
+        public event UnityAction SneakEvent = delegate {};
+        public event UnityAction DashEvent = delegate {};
         private void OnEnable()
         {
             if (_playerInputActions == null)
@@ -26,14 +27,22 @@ namespace Ronin.Input
         }
         public void OnMove(InputAction.CallbackContext context)
         {
-            OnMoveEvent?.Invoke(context.ReadValue<Vector2>());
+            MoveEvent?.Invoke(context.ReadValue<Vector2>());
         }
 
         public void OnRun(InputAction.CallbackContext context)
         {
             if (context.phase == InputActionPhase.Performed)
             {
-                OnRunEvent?.Invoke();
+                RunEvent?.Invoke();
+            }
+        }
+
+        public void OnSneak(InputAction.CallbackContext context)
+        {
+            if (context.phase == InputActionPhase.Performed)
+            {
+                SneakEvent?.Invoke();
             }
         }
 
@@ -41,7 +50,7 @@ namespace Ronin.Input
         {
             if (context.phase == InputActionPhase.Performed)
             {
-                OnDashEvent?.Invoke();
+                DashEvent?.Invoke();
             }
         }
 
@@ -71,6 +80,11 @@ namespace Ronin.Input
         }
 
         public void OnLockRight(InputAction.CallbackContext context)
+        {
+            // noop
+        }
+
+        public void OnLockClosest(InputAction.CallbackContext context)
         {
             // noop
         }

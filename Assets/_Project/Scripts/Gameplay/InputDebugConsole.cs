@@ -12,9 +12,9 @@ namespace Ronin.Gameplay // 假設這是在 Gameplay 層
             if (_inputReader == null) return;
 
             // 訂閱所有事件，並印出 Log
-            _inputReader.OnMoveEvent += OnMove;
-            _inputReader.OnRunEvent += OnRun;
-            _inputReader.OnDashEvent += OnDash;
+            _inputReader.MoveEvent += Move;
+            _inputReader.RunEvent += Run;
+            _inputReader.DashEvent += Dash;
             // _inputReader.AttackEvent += OnAttack; // 如果你有寫的話
         }
 
@@ -22,22 +22,22 @@ namespace Ronin.Gameplay // 假設這是在 Gameplay 層
         {
             if (_inputReader == null) return;
 
-            _inputReader.OnMoveEvent -= OnMove;
-            _inputReader.OnRunEvent -= OnRun;
-            _inputReader.OnDashEvent -= OnDash;
+            _inputReader.MoveEvent -= Move;
+            _inputReader.RunEvent -= Run;
+            _inputReader.DashEvent -= Dash;
         }
 
-        private void OnMove(Vector2 movement)
+        private void Move(Vector2 movement)
         {
             Debug.Log($"[Input] Move: {movement}");
         }
 
-        private void OnRun()
+        private void Run()
         {
             Debug.Log($"[Input] Run Pressed!");
         }
 
-        private void OnDash()
+        private void Dash()
         {
             Debug.Log($"[Input] Dash Pressed!");
         }

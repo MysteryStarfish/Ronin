@@ -25,13 +25,22 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Sneak",
+                    "type": "Button",
+                    "id": "9b68d0bc-33f6-4bb1-9a5a-95b28148a6fb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Dash",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "0136530d-a744-4885-a67d-ec363f541b36",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Attack",
@@ -82,6 +91,15 @@
                     "name": "LockRight",
                     "type": "Button",
                     "id": "8e920473-0d5a-4072-a4ae-9024ad9dd3ae",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LockClosest",
+                    "type": "Button",
+                    "id": "3d27a856-c452-4f46-a44d-6acd23603bbb",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -234,8 +252,30 @@
                 },
                 {
                     "name": "",
+                    "id": "01c148e5-b454-41d0-b6e9-5db113e302ee",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Run",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "859ccd54-88d7-497b-a765-9833c79b341f",
                     "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "86fa393e-e111-4e50-a96c-59add1a1d05a",
+                    "path": "<Keyboard>/u",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -306,6 +346,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "SpecialAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5a56baed-9871-4a3e-a21d-f01cc5a2bb66",
+                    "path": "<Keyboard>/l",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LockClosest",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ecd783c7-ee50-4809-9871-87c4b23f6337",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Sneak",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
