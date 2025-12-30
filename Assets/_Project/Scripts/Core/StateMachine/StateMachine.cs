@@ -5,9 +5,9 @@ namespace Ronin.Core
 {
     public class StateMachine
     {
-        private Dictionary<Type, StateNode> _nodes = new();
+        private readonly Dictionary<Type, StateNode> _nodes = new();
         public IEnumerable<StateNode> AllNodes => _nodes.Values;
-        private HashSet<ITransition> _anyTransitions = new();
+        private readonly HashSet<ITransition> _anyTransitions = new();
         private StateNode _current;
 
         public void Update()
