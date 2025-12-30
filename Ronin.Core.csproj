@@ -46,12 +46,13 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.2.15f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\_Project\Scripts\Core\Pattern\StateMachine\FuncPredicate.cs" />
-    <Compile Include="Assets\_Project\Scripts\Core\Pattern\StateMachine\Transition.cs" />
-    <Compile Include="Assets\_Project\Scripts\Core\Pattern\StateMachine\IState.cs" />
-    <Compile Include="Assets\_Project\Scripts\Core\Pattern\StateMachine\IPredicate.cs" />
-    <Compile Include="Assets\_Project\Scripts\Core\Pattern\StateMachine\StateMachine.cs" />
-    <Compile Include="Assets\_Project\Scripts\Core\Pattern\StateMachine\ITransition.cs" />
+    <Compile Include="Assets\_Project\Scripts\Core\StateMachine\StateMachine.cs" />
+    <Compile Include="Assets\_Project\Scripts\Core\StateMachine\IState.cs" />
+    <Compile Include="Assets\_Project\Scripts\Core\StateMachine\ITransition.cs" />
+    <Compile Include="Assets\_Project\Scripts\Core\Timer\Timer.cs" />
+    <Compile Include="Assets\_Project\Scripts\Core\StateMachine\Transition.cs" />
+    <Compile Include="Assets\_Project\Scripts\Core\StateMachine\IPredicate.cs" />
+    <Compile Include="Assets\_Project\Scripts\Core\StateMachine\FuncPredicate.cs" />
     <None Include="Assets\_Project\Scripts\Core\Ronin.Core.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.2.15f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
