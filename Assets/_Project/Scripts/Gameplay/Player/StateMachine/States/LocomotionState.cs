@@ -92,4 +92,26 @@ namespace Ronin.Core
             base.OnExit();
         }
     }
+    public class DashState : BaseState
+    {
+        public DashState(PlayerController player) : base(player) { }
+        public override void OnEnter()
+        {
+            base.OnEnter();
+        }
+        public override void Update()
+        {
+            base.Update();
+        }
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            Player.HandleDash();
+        }
+        public override void OnExit()
+        {
+            base.OnExit();
+            Player.HandleFinishedDash();
+        }
+    }
 }

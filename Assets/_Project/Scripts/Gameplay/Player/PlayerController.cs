@@ -22,7 +22,12 @@ namespace Ronin.Gameplay
         
         [SerializeField] private float runSpeed = 10f;
         [SerializeField] private float sneakSpeed = 2f;
-
+        
+        [Header("Dash Settings")] 
+        [SerializeField] private float dashSpeed = 15f;
+        [SerializeField] private float dashDuration = 0.3f;
+        private CountdownTimer _dashTimer;
+        
         private Vector2 _moveInput;
         private bool _runSwitch = false;
         private bool _sneakSwitch = false;
@@ -35,6 +40,7 @@ namespace Ronin.Gameplay
             _rb = GetComponent<Rigidbody2D>();
             
             SetupPlayer();
+            _dashTimer = new CountdownTimer(dashDuration);
             SetupStateMachine();
         }
 
@@ -50,15 +56,19 @@ namespace Ronin.Gameplay
             IState walkState = new WalkState(this);
             IState runState = new RunState(this);
             IState sneakState = new SneakState(this);
+            IState dashState = new DashState(this);
             
             _stateMachine.AddState(walkState);
             _stateMachine.AddState(runState);
             _stateMachine.AddState(sneakState);
+            _stateMachine.AddState(dashState);
 
             AtLocomotion(runState, new FuncPredicate(() => _runSwitch));
             At(runState, walkState, new FuncPredicate(() => !_runSwitch));
             AtLocomotion(sneakState, new FuncPredicate(() => _sneakSwitch));
             At(sneakState, walkState, new FuncPredicate(() => !_sneakSwitch));
+            AtLocomotion(dashState, new FuncPredicate(() => _dashTimer.IsRunning));
+            At(dashState, walkState, new FuncPredicate(() => _dashTimer.IsFinished));
             
             _stateMachine.SetInitState(walkState);
         }
@@ -79,12 +89,14 @@ namespace Ronin.Gameplay
             inputReader.MoveEvent += OnMove;
             inputReader.RunEvent += OnRun;
             inputReader.SneakEvent += OnSneak;
+            inputReader.DashEvent += OnDash;
         }
         private void OnDisable()
         {
             inputReader.MoveEvent -= OnMove;
             inputReader.RunEvent -= OnRun;
             inputReader.SneakEvent -= OnSneak;
+            inputReader.DashEvent -= OnDash;
         }
 
 
@@ -102,10 +114,26 @@ namespace Ronin.Gameplay
             _sneakSwitch = !_sneakSwitch;
             _runSwitch = false;
         }
+        private void OnDash()
+        {
+            _dashTimer.Start();
+        }
         private void Update()
+        {
+            HandleStateMachine();
+            HandleTimer();
+        }
+
+        private void HandleStateMachine()
         {
             _stateMachine.Update();
         }
+
+        private void HandleTimer()
+        {
+            _dashTimer.Tick(Time.deltaTime);
+        }
+
         private void FixedUpdate()
         {
             _stateMachine.FixedUpdate();
@@ -125,6 +153,15 @@ namespace Ronin.Gameplay
         public void HandleSneak()
         {
             _player.HandleMove(_moveInput, sneakSpeed);
+        }
+        public void HandleDash()
+        {
+            _player.HandleMove(_moveInput, dashSpeed);
+        }
+
+        public void HandleFinishedDash()
+        {
+            _dashTimer.Stop();
         }
     }
 

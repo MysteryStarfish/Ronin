@@ -1,5 +1,5 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Ronin.Input
@@ -8,10 +8,10 @@ namespace Ronin.Input
     public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions
     {
         private PlayerInputActions _playerInputActions;
-        public event UnityAction<Vector2> MoveEvent = delegate {};
-        public event UnityAction RunEvent = delegate {};
-        public event UnityAction SneakEvent = delegate {};
-        public event UnityAction DashEvent = delegate {};
+        public event Action<Vector2> MoveEvent = delegate {};
+        public event Action RunEvent = delegate {};
+        public event Action SneakEvent = delegate {};
+        public event Action DashEvent = delegate {};
         private void OnEnable()
         {
             if (_playerInputActions == null)
