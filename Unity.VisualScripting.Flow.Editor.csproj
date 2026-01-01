@@ -114,8 +114,8 @@
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Flow\Options\UnitCategoryOption.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Flow\FlowDragAndDropUtility.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Flow\Framework\Variables\GetVariableOption.cs" />
-    <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Flow\Plugin\Changelogs\Changelog_1_4_5.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Flow\Plugin\Changelogs\Changelog_1_0_0.cs" />
+    <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Flow\Plugin\Changelogs\Changelog_1_4_5.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Flow\Ports\InvalidInputWidget.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Flow\Framework\InputSystemWidget.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Flow\Options\UnitBase.cs" />

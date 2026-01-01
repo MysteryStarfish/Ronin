@@ -348,8 +348,8 @@
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Runtime\VisualScripting.Core\Reflection\Operators\MultiplicationHandler.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Runtime\VisualScripting.Core\Cloning\Cloners\ArrayCloner.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Runtime\VisualScripting.Core\Dependencies\FullSerializer\fsDirectConverter.cs" />
-    <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Runtime\VisualScripting.Core\Input\MouseButton.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Runtime\VisualScripting.Core\Reflection\Operators\ExclusiveOrHandler.cs" />
+    <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Runtime\VisualScripting.Core\Input\MouseButton.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Runtime\VisualScripting.Core\Listeners\UIInterfaces\UnityOnSubmitMessageListener.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Runtime\VisualScripting.Core\Events\IEventMachine.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Runtime\VisualScripting.Core\Reflection\Optimization\Func_5.cs" />

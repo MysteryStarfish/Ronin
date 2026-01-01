@@ -374,8 +374,8 @@
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Core\Plugin\Changelogs\LegacyLudiqCore\Changelog_1_4_8.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Core\ResourceProviders\AssemblyResourceProvider.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Core\Inspection\Primitives\CharInspector.cs" />
-    <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Core\Platforms\AotPreBuilder.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Core\Platforms\AotStubWriterProvider.cs" />
+    <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Core\Platforms\AotPreBuilder.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Core\Interface\Dropdowns\IDropdownOption.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Core\Inspection\Special\SystemObjectInspector.cs" />
     <Compile Include="Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Editor\VisualScripting.Core\Utilities\ScriptReferenceResolver.cs" />

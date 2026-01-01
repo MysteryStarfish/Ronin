@@ -24,13 +24,18 @@ namespace Ronin.Gameplay
         [SerializeField] private float sneakSpeed = 2f;
         
         [Header("Dash Settings")] 
-        [SerializeField] private float dashSpeed = 15f;
-        [SerializeField] private float dashDuration = 0.3f;
+        [SerializeField] private float dashSpeed = 30f;
+        [SerializeField] private float dashDuration = 0.1f;
+        [SerializeField] private float dashCooldown = 0.2f;
+        private HashSet<Timer> _timers;
         private CountdownTimer _dashTimer;
+        private CountdownTimer _dashCooldownTimer;
         
         private Vector2 _moveInput;
+        private Vector2 _dashDirection;
         private bool _runSwitch = false;
         private bool _sneakSwitch = false;
+        private bool CanDash => _dashCooldownTimer.IsFinished;
 
         private PlayerMovement _player;
         private StateMachine _stateMachine;
@@ -40,8 +45,21 @@ namespace Ronin.Gameplay
             _rb = GetComponent<Rigidbody2D>();
             
             SetupPlayer();
-            _dashTimer = new CountdownTimer(dashDuration);
+            SetupTimers();
             SetupStateMachine();
+        }
+
+        private void SetupTimers()
+        {
+            _timers = new HashSet<Timer>();
+            
+            _dashTimer = new CountdownTimer(dashDuration);
+            _timers.Add(_dashTimer);
+            _dashCooldownTimer = new CountdownTimer(dashCooldown);
+            _timers.Add(_dashCooldownTimer);
+            
+            _dashTimer.OnStart += () => { _dashDirection = _moveInput; };
+            _dashTimer.OnStop += _dashCooldownTimer.Start;
         }
 
         private void SetupPlayer()
@@ -116,7 +134,7 @@ namespace Ronin.Gameplay
         }
         private void OnDash()
         {
-            _dashTimer.Start();
+            if (CanDash) _dashTimer.Start();
         }
         private void Update()
         {
@@ -131,7 +149,10 @@ namespace Ronin.Gameplay
 
         private void HandleTimer()
         {
-            _dashTimer.Tick(Time.deltaTime);
+            foreach (Timer timer in _timers)
+            {
+                timer.Tick(Time.deltaTime);
+            }
         }
 
         private void FixedUpdate()
@@ -156,12 +177,12 @@ namespace Ronin.Gameplay
         }
         public void HandleDash()
         {
-            _player.HandleMove(_moveInput, dashSpeed);
+            _player.HandleMove(_dashDirection, dashSpeed);
         }
 
         public void HandleFinishedDash()
         {
-            _dashTimer.Stop();
+            // noop
         }
     }
 
