@@ -30,19 +30,30 @@ namespace Ronin.Gameplay
         private HashSet<Timer> _timers;
         private CountdownTimer _dashTimer;
         private CountdownTimer _dashCooldownTimer;
+
+        [Header("Detector Setting")] 
+        [SerializeField] private float radius = 10f;
+        [SerializeField] private LayerMask layerMask;
+        public float DetectorRadius => radius;
         
         private Vector2 _moveInput;
         private Vector2 _dashDirection;
         private bool _runSwitch = false;
         private bool _sneakSwitch = false;
+        private bool _lockSwitch = false;
         private bool CanDash => _dashCooldownTimer.IsFinished;
+        private Transform _currentTarget;
+        private EnemyDetector _detector;
+        public Transform AimTarget => _currentTarget;
 
         private PlayerMovement _player;
         private StateMachine _stateMachine;
-    
+        
+
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
+            _detector = new EnemyDetector(radius, layerMask);
             
             SetupPlayer();
             SetupTimers();
@@ -108,6 +119,8 @@ namespace Ronin.Gameplay
             inputReader.RunEvent += OnRun;
             inputReader.SneakEvent += OnSneak;
             inputReader.DashEvent += OnDash;
+            inputReader.LockClosestEvent += OnLockClosest;
+            inputReader.UnLockEvent += OnUnLock;
         }
         private void OnDisable()
         {
@@ -115,6 +128,8 @@ namespace Ronin.Gameplay
             inputReader.RunEvent -= OnRun;
             inputReader.SneakEvent -= OnSneak;
             inputReader.DashEvent -= OnDash;
+            inputReader.LockClosestEvent -= OnLockClosest;
+            inputReader.UnLockEvent -= OnUnLock;
         }
 
 
@@ -135,6 +150,33 @@ namespace Ronin.Gameplay
         private void OnDash()
         {
             if (CanDash) _dashTimer.Start();
+        }
+        private void OnUnLock()
+        {
+            _lockSwitch = !_lockSwitch;
+            if (!_lockSwitch)
+            {
+                _currentTarget = null;
+                return;
+            }
+            _detector.Update(transform);
+            _currentTarget = _detector.FindClosestTarget(transform)?.transform;
+        }        
+        private void OnLockClosest()
+        {
+            _lockSwitch = true;
+            _detector.Update(transform);
+            _currentTarget = _detector.FindClosestTarget(transform)?.transform;
+        }
+        private void OnLockLeft()
+        {
+            _lockSwitch = true;
+            _currentTarget = _detector.FindLeftTarget();
+        }
+        private void OnLockRight()
+        {
+            _lockSwitch = true;
+            _currentTarget = _detector.FindLeftRight();
         }
         private void Update()
         {
@@ -161,7 +203,12 @@ namespace Ronin.Gameplay
         }
         public void HandleLocomotion()
         {
-            // noop
+            HandleRotation();
+        }
+        public void HandleRotation()
+        {
+            if (!_lockSwitch) _player.HandleRotation(_moveInput);
+            else _player.HandleRotation(_currentTarget.transform.position - transform.position);
         }
         public void HandleWalk()
         {
@@ -197,6 +244,10 @@ namespace Ronin.Gameplay
         public void HandleMove(Vector2 direction, float speed)
         {
             _rb.linearVelocity = direction * speed;
+        }
+        public void HandleRotation(Vector2 targetPosition)
+        {
+            _rb.transform.FaceDirection2D(targetPosition);
         }
     }
 }
