@@ -12,6 +12,8 @@ namespace Ronin.Input
         public event Action RunEvent = delegate {};
         public event Action SneakEvent = delegate {};
         public event Action DashEvent = delegate {};
+        public event Action LockClosestEvent = delegate {};
+        public event Action UnLockEvent = delegate {};
         private void OnEnable()
         {
             if (_playerInputActions == null)
@@ -71,7 +73,10 @@ namespace Ronin.Input
 
         public void OnUnlock(InputAction.CallbackContext context)
         {
-            // noop
+            if (context.phase == InputActionPhase.Performed)
+            {
+                UnLockEvent?.Invoke();
+            }
         }
 
         public void OnLockLeft(InputAction.CallbackContext context)
@@ -86,7 +91,10 @@ namespace Ronin.Input
 
         public void OnLockClosest(InputAction.CallbackContext context)
         {
-            // noop
+            if (context.phase == InputActionPhase.Performed)
+            {
+                LockClosestEvent.Invoke();
+            }
         }
     }
 }
