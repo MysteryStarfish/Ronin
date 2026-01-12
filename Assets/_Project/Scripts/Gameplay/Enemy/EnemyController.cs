@@ -1,11 +1,13 @@
+using Ronin.Core;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Ronin.Gameplay
 {
-    public class EnemyController : MonoBehaviour
+    public class EnemyController : MonoBehaviour, ILockable
     {
-        
+        Transform ILockable.Transform => transform;
+
+        bool ILockable.CanLock => true;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
@@ -17,6 +19,7 @@ namespace Ronin.Gameplay
         {
 
         }
+
     }
 
 }
