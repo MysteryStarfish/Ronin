@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using Ronin.Core;
 using UnityEngine;
 using Ronin.Input;
-using UnityEngine.Serialization;
 
 namespace Ronin.Gameplay
 {
@@ -42,8 +40,14 @@ namespace Ronin.Gameplay
         private bool _sneakSwitch = false;
         private bool _lockSwitch = false;
         private bool CanDash => _dashCooldownTimer.IsFinished;
+
+        [SerializeField] private TargetScannerPriorityList priorityList;
+        private TargetScanner<ILockable> _targetScanner;
+        private CircleScanTargets _circleScanner;
+        private SelectLeftMost _selectLeftMost;
+        private SelectRightMost _selectRightMost;
+        private SelectClosest _selectClosest;
         private Transform _currentTarget;
-        private EnemyDetector _detector;
         public Transform AimTarget => _currentTarget;
 
         private PlayerMovement _player;
@@ -53,11 +57,11 @@ namespace Ronin.Gameplay
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
-            _detector = new EnemyDetector(radius, layerMask);
             
             SetupPlayer();
             SetupTimers();
             SetupStateMachine();
+            SetupTargetScanner();
         }
 
         private void SetupTimers()
@@ -71,6 +75,16 @@ namespace Ronin.Gameplay
             
             _dashTimer.OnStart += () => { _dashDirection = _moveInput; };
             _dashTimer.OnStop += _dashCooldownTimer.Start;
+        }
+        
+        private void SetupTargetScanner()
+        {
+            _circleScanner = new CircleScanTargets(radius, layerMask);
+            _targetScanner = new TargetScanner<ILockable>(_circleScanner);
+
+            _selectLeftMost = new SelectLeftMost(priorityList.Priority);
+            _selectRightMost = new SelectRightMost(priorityList.Priority);
+            _selectClosest = new SelectClosest(priorityList.Priority);
         }
 
         private void SetupPlayer()
@@ -120,6 +134,8 @@ namespace Ronin.Gameplay
             inputReader.SneakEvent += OnSneak;
             inputReader.DashEvent += OnDash;
             inputReader.LockClosestEvent += OnLockClosest;
+            inputReader.LockLeftEvent += OnLockLeft;
+            inputReader.LockRightEvent += OnLockRight;
             inputReader.UnLockEvent += OnUnLock;
         }
         private void OnDisable()
@@ -128,6 +144,8 @@ namespace Ronin.Gameplay
             inputReader.RunEvent -= OnRun;
             inputReader.SneakEvent -= OnSneak;
             inputReader.DashEvent -= OnDash;
+            inputReader.LockClosestEvent -= OnLockClosest;
+            inputReader.LockClosestEvent -= OnLockClosest;
             inputReader.LockClosestEvent -= OnLockClosest;
             inputReader.UnLockEvent -= OnUnLock;
         }
@@ -159,24 +177,32 @@ namespace Ronin.Gameplay
                 _currentTarget = null;
                 return;
             }
-            _detector.Update(transform);
-            _currentTarget = _detector.FindClosestTarget(transform)?.transform;
-        }        
+            _currentTarget = TryGetTarget(_selectClosest);
+            if (_currentTarget == null) _lockSwitch = false;
+        }
+
         private void OnLockClosest()
         {
-            _lockSwitch = true;
-            _detector.Update(transform);
-            _currentTarget = _detector.FindClosestTarget(transform)?.transform;
+            _currentTarget = TryGetTarget(_selectClosest);
+            if (_currentTarget != null) _lockSwitch = true;
         }
         private void OnLockLeft()
         {
             _lockSwitch = true;
-            _currentTarget = _detector.FindLeftTarget();
+            _currentTarget = TryGetTarget(_selectLeftMost);
+            if (_currentTarget != null) _lockSwitch = true;
         }
         private void OnLockRight()
         {
             _lockSwitch = true;
-            _currentTarget = _detector.FindLeftRight();
+            _currentTarget = TryGetTarget(_selectRightMost);
+            if (_currentTarget != null) _lockSwitch = true;
+        }
+        private Transform TryGetTarget(ISelectTargetStrategy<ILockable> strategy)
+        {
+            var target = _targetScanner.GetTarget(transform, strategy);
+            if (target == null) return null;
+            return target.Transform;
         }
         private void Update()
         {
@@ -207,7 +233,7 @@ namespace Ronin.Gameplay
         }
         public void HandleRotation()
         {
-            if (!_lockSwitch) _player.HandleRotation(_moveInput);
+            if (!_lockSwitch || !_currentTarget) _player.HandleRotation(_moveInput);
             else _player.HandleRotation(_currentTarget.transform.position - transform.position);
         }
         public void HandleWalk()

@@ -13,6 +13,8 @@ namespace Ronin.Input
         public event Action SneakEvent = delegate {};
         public event Action DashEvent = delegate {};
         public event Action LockClosestEvent = delegate {};
+        public event Action LockLeftEvent = delegate {};
+        public event Action LockRightEvent = delegate {};
         public event Action UnLockEvent = delegate {};
         private void OnEnable()
         {
@@ -81,12 +83,18 @@ namespace Ronin.Input
 
         public void OnLockLeft(InputAction.CallbackContext context)
         {
-            // noop
+            if (context.phase == InputActionPhase.Performed)
+            {
+                LockLeftEvent?.Invoke();
+            }
         }
 
         public void OnLockRight(InputAction.CallbackContext context)
         {
-            // noop
+            if (context.phase == InputActionPhase.Performed)
+            {
+                LockRightEvent?.Invoke();
+            }
         }
 
         public void OnLockClosest(InputAction.CallbackContext context)
