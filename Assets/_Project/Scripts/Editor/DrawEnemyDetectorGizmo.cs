@@ -12,6 +12,8 @@ namespace MyTools
         static void DrawDetectorGizmo(PlayerController player, GizmoType gizmoType)
         {
             Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(player.transform.position, player.InnerRadius);
+            Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(player.transform.position, player.DetectorRadius);
         }
         [DrawGizmo(GizmoType.Active)]

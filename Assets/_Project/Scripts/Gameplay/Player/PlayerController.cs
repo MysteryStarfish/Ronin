@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Ronin.Core;
 using UnityEngine;
 using Ronin.Input;
+using UnityEngine.Serialization;
 
 namespace Ronin.Gameplay
 {
@@ -28,10 +29,13 @@ namespace Ronin.Gameplay
         private HashSet<Timer> _timers;
         private CountdownTimer _dashTimer;
         private CountdownTimer _dashCooldownTimer;
-
+        
         [Header("Detector Setting")] 
+        [SerializeField] private GameObject direaction;
+        [SerializeField] private float innerRadius = 10f;
         [SerializeField] private float radius = 10f;
         [SerializeField] private LayerMask layerMask;
+        public float InnerRadius => innerRadius;
         public float DetectorRadius => radius;
         
         private Vector2 _moveInput;
@@ -47,8 +51,9 @@ namespace Ronin.Gameplay
         private SelectLeftMost _selectLeftMost;
         private SelectRightMost _selectRightMost;
         private SelectClosest _selectClosest;
-        private Transform _currentTarget;
-        public Transform AimTarget => _currentTarget;
+        private SelectEmergency _selectEmergency;
+        private ILockable _currentTarget;
+        public Transform AimTarget => _currentTarget?.Transform;
 
         private PlayerMovement _player;
         private StateMachine _stateMachine;
@@ -80,16 +85,40 @@ namespace Ronin.Gameplay
         private void SetupTargetScanner()
         {
             _circleScanner = new CircleScanTargets(radius, layerMask);
-            _targetScanner = new TargetScanner<ILockable>(_circleScanner);
 
             _selectLeftMost = new SelectLeftMost(priorityList.Priority);
             _selectRightMost = new SelectRightMost(priorityList.Priority);
             _selectClosest = new SelectClosest(priorityList.Priority);
+            _selectEmergency = new SelectEmergency(priorityList.Priority, innerRadius);
+            
+            _targetScanner = new TargetScanner<ILockable>(_circleScanner);
+        }
+
+        private ILockable SelectLeft()
+        {
+            var result = _targetScanner.GetTarget(transform, _selectEmergency);
+            if (result != null) return result;
+            result = _targetScanner.GetTarget(transform, _selectLeftMost, _currentTarget);
+            return result;
+        }
+        private ILockable SelectRight()
+        {
+            var result = _targetScanner.GetTarget(transform, _selectEmergency);
+            if (result != null) return result;
+            result = _targetScanner.GetTarget(transform, _selectRightMost, _currentTarget);
+            return result;
+        }
+        private ILockable SelectClosest()
+        {
+            var result = _targetScanner.GetTarget(transform, _selectEmergency);
+            if (result != null) return result;
+            result = _targetScanner.GetTarget(transform, _selectClosest, _currentTarget);
+            return result;
         }
 
         private void SetupPlayer()
         {
-            _player = new PlayerMovement(_rb);
+            _player = new PlayerMovement(_rb, direaction.transform);
         }
 
         private void SetupStateMachine()
@@ -177,32 +206,26 @@ namespace Ronin.Gameplay
                 _currentTarget = null;
                 return;
             }
-            _currentTarget = TryGetTarget(_selectClosest);
+            _currentTarget = SelectClosest();
             if (_currentTarget == null) _lockSwitch = false;
         }
 
         private void OnLockClosest()
         {
-            _currentTarget = TryGetTarget(_selectClosest);
+            _currentTarget = SelectClosest();
             if (_currentTarget != null) _lockSwitch = true;
         }
         private void OnLockLeft()
         {
             _lockSwitch = true;
-            _currentTarget = TryGetTarget(_selectLeftMost);
+            _currentTarget = SelectLeft();
             if (_currentTarget != null) _lockSwitch = true;
         }
         private void OnLockRight()
         {
             _lockSwitch = true;
-            _currentTarget = TryGetTarget(_selectRightMost);
+            _currentTarget = SelectRight();
             if (_currentTarget != null) _lockSwitch = true;
-        }
-        private Transform TryGetTarget(ISelectTargetStrategy<ILockable> strategy)
-        {
-            var target = _targetScanner.GetTarget(transform, strategy);
-            if (target == null) return null;
-            return target.Transform;
         }
         private void Update()
         {
@@ -233,8 +256,9 @@ namespace Ronin.Gameplay
         }
         public void HandleRotation()
         {
-            if (!_lockSwitch || !_currentTarget) _player.HandleRotation(_moveInput);
-            else _player.HandleRotation(_currentTarget.transform.position - transform.position);
+            if (!_lockSwitch || _currentTarget != null) _player.HandleRotation(_moveInput);
+            else if (_currentTarget != null)
+                _player.HandleRotation(_currentTarget.Transform.position - transform.position);
         }
         public void HandleWalk()
         {
@@ -262,10 +286,12 @@ namespace Ronin.Gameplay
     public class PlayerMovement
     {
         private readonly Rigidbody2D _rb;
+        private readonly Transform _direction;
         
-        public PlayerMovement(Rigidbody2D rb)
+        public PlayerMovement(Rigidbody2D rb, Transform direction)
         {
             _rb = rb;
+            _direction = direction;
         }
         public void HandleMove(Vector2 direction, float speed)
         {
@@ -273,7 +299,7 @@ namespace Ronin.Gameplay
         }
         public void HandleRotation(Vector2 targetPosition)
         {
-            _rb.transform.FaceDirection2D(targetPosition);
+            _direction.FaceDirection2D(targetPosition);
         }
     }
 }
