@@ -20,5 +20,10 @@ namespace Ronin.Core
             _scanStrategy.GetTargets(transform, _targets);
             return targetSelector.SelectTarget(transform, _targets);
         }
+        public T GetTarget(Transform transform, ISelectTargetStrategy<T> targetSelector, T currentTarget)
+        {
+            _scanStrategy.GetTargets(transform, _targets);
+            return targetSelector.SelectTarget(transform, _targets, currentTarget);
+        }
     }
 }

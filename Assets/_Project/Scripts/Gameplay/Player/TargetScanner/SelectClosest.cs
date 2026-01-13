@@ -12,7 +12,8 @@ namespace Ronin.Gameplay
         {
             _priorityList = priorityList;
         }
-        public ILockable SelectTarget(Transform transform, List<ILockable> targets)
+
+        public ILockable SelectTarget(Transform transform, List<ILockable> targets, ILockable ignore=null)
         {
             ILockable resultTarget = null;
             float minDistance = Single.MaxValue;
