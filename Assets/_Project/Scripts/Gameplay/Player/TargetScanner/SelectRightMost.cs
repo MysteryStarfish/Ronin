@@ -21,7 +21,7 @@ namespace Ronin.Gameplay
                 if (!target.CanLock) continue;
                 if (target == ignore) continue;
                 Vector2 targetVector = target.Transform.position - transform.position;
-                Vector2 faceDirection = target.Transform.right;
+                Vector2 faceDirection = transform.right;
                 float targetAngle = faceDirection.ClockwiseAngle(targetVector);
                 if (targetAngle < minAngle)
                 {

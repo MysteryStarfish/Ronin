@@ -31,7 +31,7 @@ namespace Ronin.Gameplay
         private CountdownTimer _dashCooldownTimer;
         
         [Header("Detector Setting")] 
-        [SerializeField] private GameObject direaction;
+        [SerializeField] private Transform direction;
         [SerializeField] private float innerRadius = 10f;
         [SerializeField] private float radius = 10f;
         [SerializeField] private LayerMask layerMask;
@@ -96,29 +96,29 @@ namespace Ronin.Gameplay
 
         private ILockable SelectLeft()
         {
-            var result = _targetScanner.GetTarget(transform, _selectEmergency);
+            var result = _targetScanner.GetTarget(direction, _selectEmergency);
             if (result != null) return result;
-            result = _targetScanner.GetTarget(transform, _selectLeftMost, _currentTarget);
+            result = _targetScanner.GetTarget(direction, _selectLeftMost, _currentTarget);
             return result;
         }
         private ILockable SelectRight()
         {
-            var result = _targetScanner.GetTarget(transform, _selectEmergency);
+            var result = _targetScanner.GetTarget(direction, _selectEmergency);
             if (result != null) return result;
-            result = _targetScanner.GetTarget(transform, _selectRightMost, _currentTarget);
+            result = _targetScanner.GetTarget(direction, _selectRightMost, _currentTarget);
             return result;
         }
         private ILockable SelectClosest()
         {
-            var result = _targetScanner.GetTarget(transform, _selectEmergency);
+            var result = _targetScanner.GetTarget(direction, _selectEmergency);
             if (result != null) return result;
-            result = _targetScanner.GetTarget(transform, _selectClosest, _currentTarget);
+            result = _targetScanner.GetTarget(direction, _selectClosest, _currentTarget);
             return result;
         }
 
         private void SetupPlayer()
         {
-            _player = new PlayerMovement(_rb, direaction.transform);
+            _player = new PlayerMovement(_rb, direction);
         }
 
         private void SetupStateMachine()
@@ -254,11 +254,11 @@ namespace Ronin.Gameplay
         {
             HandleRotation();
         }
-        public void HandleRotation()
+
+        private void HandleRotation()
         {
-            if (!_lockSwitch || _currentTarget != null) _player.HandleRotation(_moveInput);
-            else if (_currentTarget != null)
-                _player.HandleRotation(_currentTarget.Transform.position - transform.position);
+            if (!_lockSwitch || _currentTarget == null) _player.HandleRotation(_moveInput);
+            else _player.HandleRotation(_currentTarget.Transform.position - direction.position);
         }
         public void HandleWalk()
         {
