@@ -6,13 +6,11 @@ namespace Ronin.Core
     public class CircleScanTargets : IScanTargetsStrategy<ILockable>
     {
         private readonly float _radius;
-        private List<Collider2D> _hitBuffer;
-        private LayerMask _layerMask;
-        public CircleScanTargets(float radius, LayerMask layerMask)
+        private readonly List<Collider2D> _hitBuffer;
+        public CircleScanTargets(float radius)
         {
             _radius = radius;
             _hitBuffer = new List<Collider2D>();
-            _layerMask = layerMask;
         }
         public void GetTargets(Transform player, List<ILockable> targets)
         {

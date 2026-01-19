@@ -12,8 +12,9 @@ namespace Ronin.Gameplay
         {
             _priorityList = priorityList;
         }
-        public ILockable SelectTarget(Transform transform, List<ILockable> targets, ILockable ignore)
+        public void SelectTargets(Transform transform, List<ILockable> targets, List<ILockable> results, ILockable ignore)
         {
+            results.Clear();
             ILockable resultTarget = null;
             float minAngle = Single.MaxValue;
             foreach (ILockable target in targets)
@@ -29,8 +30,7 @@ namespace Ronin.Gameplay
                     resultTarget = target;
                 }
             }
-
-            return resultTarget ?? ignore;
+            results.Add(resultTarget ?? ignore);
         }
     }
 }

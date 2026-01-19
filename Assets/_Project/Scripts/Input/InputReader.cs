@@ -16,6 +16,8 @@ namespace Ronin.Input
         public event Action LockLeftEvent = delegate {};
         public event Action LockRightEvent = delegate {};
         public event Action UnLockEvent = delegate {};
+        public event Action AttackEvent = delegate {};
+        
         private void OnEnable()
         {
             if (_playerInputActions == null)
@@ -60,7 +62,10 @@ namespace Ronin.Input
 
         public void OnAttack(InputAction.CallbackContext context)
         {
-            // noop
+            if (context.phase == InputActionPhase.Performed)
+            {
+                AttackEvent?.Invoke();
+            }
         }
 
         public void OnChargeAttack(InputAction.CallbackContext context)

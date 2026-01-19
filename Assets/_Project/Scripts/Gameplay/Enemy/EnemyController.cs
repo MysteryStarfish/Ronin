@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Ronin.Gameplay
 {
-    public class EnemyController : MonoBehaviour, ILockable
+    public class EnemyController : MonoBehaviour, ILockable, IAttackable
     {
         Transform ILockable.Transform => transform;
 
@@ -20,6 +20,10 @@ namespace Ronin.Gameplay
 
         }
 
+        public void OnAttack()
+        {
+            
+        }
     }
 
 }
