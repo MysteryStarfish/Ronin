@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Ronin.Core;
 using UnityEngine;
 using Ronin.Input;
+using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 
 namespace Ronin.Gameplay
@@ -40,6 +41,11 @@ namespace Ronin.Gameplay
         [SerializeField] private float startup = 0.1f;
         [SerializeField] private float strike = 0.1f;
         [SerializeField] private float recovery = 0.2f;
+        [SerializeField] private float chargeTime = 1f;
+        [SerializeField] private float aimTime = 1f;
+        [SerializeField] private float aimSlowMotionScale = 20f;
+        [SerializeField] private Volume bulletTimeVolume;
+        [SerializeField] private float fadeSpeed = 5f;
 
         public float InnerRadius => innerRadius;
         public float DetectorRadius => radius;
@@ -50,6 +56,8 @@ namespace Ronin.Gameplay
         private bool _sneakSwitch = false;
         private bool _lockSwitch = false;
         private bool _isAttack = false;
+        private bool _isCharge = false;
+        private bool _isAim = false;
         private bool CanDash => _dashCooldownTimer.IsFinished;
 
         [SerializeField] private TargetScannerPriorityList priorityList;
@@ -144,30 +152,41 @@ namespace Ronin.Gameplay
         {
             _player = new PlayerMovement(_rb, direction);
         }
-
         private void SetupStateMachine()
         {
             _stateMachine = new StateMachine();
 
             IState walkState = new WalkState(this);
-            IState runState = new RunState(this);
-            IState sneakState = new SneakState(this);
-            IState dashState = new DashState(this);
-            IState attackState = new AttackState(this, startup, strike, recovery);
-            
             _stateMachine.AddState(walkState);
+            IState runState = new RunState(this);
             _stateMachine.AddState(runState);
+            IState sneakState = new SneakState(this);
             _stateMachine.AddState(sneakState);
+            IState dashState = new DashState(this);
             _stateMachine.AddState(dashState);
+            IState attackState = new AttackState(this, startup, strike, recovery);
+            _stateMachine.AddState(attackState);
+            IState chargeState = new ChargeAttackState(this, chargeTime);
+            _stateMachine.AddState(chargeState);
+            IState aimState = new AimState(this, aimTime, aimSlowMotionScale, bulletTimeVolume, fadeSpeed);
+            _stateMachine.AddState(aimState);
 
             AtLocomotion(runState, new FuncPredicate(() => _runSwitch));
             At(runState, walkState, new FuncPredicate(() => !_runSwitch));
+            
             AtLocomotion(sneakState, new FuncPredicate(() => _sneakSwitch));
             At(sneakState, walkState, new FuncPredicate(() => !_sneakSwitch));
+            
             AtLocomotion(dashState, new FuncPredicate(() => _dashTimer.IsRunning));
             At(dashState, walkState, new FuncPredicate(() => _dashTimer.IsFinished));
+            
             Any(attackState, new FuncPredicate(() => _isAttack));
             At(attackState, walkState, new FuncPredicate(() => !_isAttack));
+            
+            Any(chargeState, new FuncPredicate(() => _isCharge));
+            At(chargeState, aimState, new FuncPredicate(() => !_isCharge));
+            
+            At(aimState, walkState, new FuncPredicate(() => !_isAim));
             
             _stateMachine.SetInitState(walkState);
         }
@@ -194,6 +213,7 @@ namespace Ronin.Gameplay
             inputReader.LockRightEvent += OnLockRight;
             inputReader.UnLockEvent += OnUnLock;
             inputReader.AttackEvent += OnStartAttack;
+            inputReader.ChargeEvent += OnStartChargeAttack;
         }
         private void OnDisable()
         {
@@ -206,6 +226,7 @@ namespace Ronin.Gameplay
             inputReader.LockClosestEvent -= OnLockClosest;
             inputReader.UnLockEvent -= OnUnLock;
             inputReader.AttackEvent -= OnStartAttack;
+            inputReader.ChargeEvent -= OnStartChargeAttack;
         }
 
         private void OnMove(Vector2 input)
@@ -269,9 +290,25 @@ namespace Ronin.Gameplay
                 target.OnAttack();
             }
         }
+        
         public void OnFinishAttack()
         {
             _isAttack = false;
+        }
+        
+        public void OnStartChargeAttack()
+        {
+            _isCharge = true;
+        }
+        public void OnFinishChargeAttack()
+        {
+            _isCharge = false;
+            _isAim = true;
+        }
+
+        public void OnFinishAim()
+        {
+            _isAim = false;
         }
         private void Update()
         {

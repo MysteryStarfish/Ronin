@@ -17,6 +17,8 @@ namespace Ronin.Input
         public event Action LockRightEvent = delegate {};
         public event Action UnLockEvent = delegate {};
         public event Action AttackEvent = delegate {};
+        public event Action ChargeEvent = delegate {};
+        public event Action BulletTimeEvent = delegate {};
         
         private void OnEnable()
         {
@@ -70,7 +72,14 @@ namespace Ronin.Input
 
         public void OnChargeAttack(InputAction.CallbackContext context)
         {
-            // noop
+            if (context.phase == InputActionPhase.Performed)
+            {
+                ChargeEvent?.Invoke();
+            }
+            else if (context.phase == InputActionPhase.Canceled)
+            {
+                BulletTimeEvent?.Invoke();
+            }
         }
 
         public void OnSpecialAttack(InputAction.CallbackContext context)
