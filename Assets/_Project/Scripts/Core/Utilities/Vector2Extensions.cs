@@ -21,5 +21,14 @@ namespace Ronin.Core
         {
             return CounterclockwiseAngle(to, from);
         }
+        
+        /// <summary>
+        /// form 跟 to 差幾度 
+        /// </summary>
+        public static float Angle(this Vector2 from, Vector2 to)
+        {
+            var angle = Vector2.SignedAngle(from, to);
+            return Mathf.Abs(angle);
+        }
     }
 }

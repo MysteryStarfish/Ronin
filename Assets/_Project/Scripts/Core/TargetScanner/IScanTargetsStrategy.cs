@@ -5,6 +5,6 @@ namespace Ronin.Core
 {
     public interface IScanTargetsStrategy<T>
     {
-        void GetTargets(Transform transform, List<T> targets);
+        void GetTargets(Transform origin, List<T> targets);
     }
 }

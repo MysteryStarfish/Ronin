@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Ronin.Gameplay
 {
-    public class ChargeAttackState : BaseState
+    public class ChargeAttackState : PlayerBaseState
     {
         private CountdownTimer _chargeTimer;
         private readonly HashSet<Timer> _timers;

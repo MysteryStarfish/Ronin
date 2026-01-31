@@ -2,7 +2,7 @@ using Ronin.Gameplay;
 
 namespace Ronin.Core
 {
-    public class LocomotionState : BaseState {
+    public class LocomotionState : PlayerBaseState {
         public LocomotionState(PlayerController player) : base(player) { }
 
         public override void OnEnter()
@@ -92,7 +92,7 @@ namespace Ronin.Core
             base.OnExit();
         }
     }
-    public class DashState : BaseState
+    public class DashState : PlayerBaseState
     {
         public DashState(PlayerController player) : base(player) { }
         public override void OnEnter()

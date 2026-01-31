@@ -1,14 +1,14 @@
-using Ronin.Gameplay;
+using Ronin.Core;
 
-namespace Ronin.Core
+namespace Ronin.Gameplay
 {
-    public class BaseState: IState
+    public class EnemyBaseState : IState
     {
-        protected readonly PlayerController Player;
+        protected readonly EnemyController Enemy;
 
-        protected BaseState(PlayerController player)
+        protected EnemyBaseState(EnemyController enemy)
         {
-            Player = player;
+            Enemy = enemy;
         }
         public virtual void OnEnter()
         {

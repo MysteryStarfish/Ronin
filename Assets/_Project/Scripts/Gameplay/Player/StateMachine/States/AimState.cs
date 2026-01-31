@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 namespace Ronin.Gameplay
 {
-    public class AimState : BaseState
+    public class AimState : PlayerBaseState
     {
         private TimeScaleManager _timeScaleManager;
         private Timer _aimTimer;

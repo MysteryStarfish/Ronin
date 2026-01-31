@@ -23,4 +23,15 @@ namespace MyTools
             Gizmos.DrawSphere(player.AimTarget.position, 0.5f);
         }
     }
+    
+    [CustomEditor(typeof(EnemyController))]
+    public class DrawPlayerDetectorGizmo : Editor
+    {
+        [DrawGizmo(GizmoType.Selected | GizmoType.Active)]
+        static void DrawDetectorGizmo(EnemyController player, GizmoType gizmoType)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(player.transform.position, player.DetectorRadius);
+        }
+    }
 }

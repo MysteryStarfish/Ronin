@@ -3,13 +3,12 @@ using Ronin.Core;
 using UnityEngine;
 using Ronin.Input;
 using UnityEngine.Rendering;
-using UnityEngine.Serialization;
 
 namespace Ronin.Gameplay
 {
     [RequireComponent(typeof(Rigidbody2D))]
 
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IMadable
     {
         [Header("References")] 
         [SerializeField] private InputReader inputReader;
@@ -62,7 +61,7 @@ namespace Ronin.Gameplay
 
         [SerializeField] private TargetScannerPriorityList priorityList;
         private TargetScanner<ILockable> _targetLockableScanner;
-        private CircleScanTargets _circleScanner;
+        private CircleScanTargets<ILockable> _circleScanner;
         private SelectLeftMost _selectLeftMost;
         private SelectRightMost _selectRightMost;
         private SelectClosest _selectClosest;
@@ -106,8 +105,8 @@ namespace Ronin.Gameplay
         
         private void SetupTargetLockableScanner()
         {
-            _circleScanner = new CircleScanTargets(radius);
-
+            _circleScanner = new CircleScanTargets<ILockable>(radius);
+            
             _selectLeftMost = new SelectLeftMost(priorityList.Priority);
             _selectRightMost = new SelectRightMost(priorityList.Priority);
             _selectClosest = new SelectClosest(priorityList.Priority);
@@ -368,6 +367,8 @@ namespace Ronin.Gameplay
         {
             // noop
         }
+
+        public Transform Transform => transform;
     }
 
     public class PlayerMovement

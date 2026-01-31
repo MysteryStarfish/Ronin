@@ -12,7 +12,7 @@ namespace Ronin.Core
             _collider2D = collider2D;
             _hitBuffer = new List<Collider2D>();
         }
-        public void GetTargets(Transform player, List<IAttackable> targets)
+        public void GetTargets(Transform origin, List<IAttackable> targets)
         {
             targets.Clear();
 
